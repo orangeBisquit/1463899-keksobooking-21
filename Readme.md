@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Артем Высоцкий](https://up.htmlacademy.ru/javascript/21/user/1463899).
-* Наставник: `Неизвестно`.
+* Наставник: [Виктор Кан].
 
 ---
 
