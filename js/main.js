@@ -35,30 +35,30 @@ const getRandomArrayValues = (array) => {
 };
 
 // Рендер массива объектов
+
+// Переменные
+const avatarDir = `img/avatars/user0`; // + Number + .png
+const title = `Объявление`;
+const TYPE = [`palace`, `flat`, `house`, `bungalow`];
+const CHECKIN = [`12:00`, `13:00`, `14:00`];
+const CHECKOUT = [`12:00`, `13:00`, `14:00`];
+const FEATURES = [
+  `wifi`,
+  `dishwasher`,
+  `parking`,
+  `washer`,
+  `elevator`,
+  `conditioner`,
+];
+const description = `Подробное описание №`;
+const photosDir = `http://o0.github.io/assets/images/tokyo/hotel`; // + Number + .jpg
+
 const renderRandomAds = (adsNumber) => {
   const adsArray = [];
 
   for (let i = 0; i < adsNumber; i++) {
-    // Переменные
-    const avatarDir = `img/avatars/user0`; // + Number + .png
-    const title = `Объявление`;
-    const TYPE = [`palace`, `flat`, `house`, `bungalow`];
-    const CHECKIN = [`12:00`, `13:00`, `14:00`];
-    const CHECKOUT = [`12:00`, `13:00`, `14:00`];
-    const FEATURES = [
-      `wifi`,
-      `dishwasher`,
-      `parking`,
-      `washer`,
-      `elevator`,
-      `conditioner`,
-    ];
-    const description = `Подробное описание №`;
-    const photosDir = `http://o0.github.io/assets/images/tokyo/hotel`; // + Number + .jpg
-
     const adNumber = i + 1;
 
-    // Создание массива
     adsArray[i] = {
       author: {
         avatar: avatarDir + adNumber + `.png`,
@@ -93,10 +93,10 @@ map.classList.remove(`map--faded`);
 
 /* ЗАДАНИЕ 3 */
 
+const pin = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+
 // Генерация пина
 const generatePin = (pinData) => {
-  const pin = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-
   const newPin = pin.cloneNode(true);
   const locationX = pinData.location.x - pin.offsetWidth;
   const locationY = pinData.location.y - pin.offsetWidth;
@@ -109,8 +109,9 @@ const generatePin = (pinData) => {
 };
 
 // Рендер пинов на карте
+const pinsArea = document.querySelector(`.map__pins`);
+
 const renderPins = (adsArray) => {
-  const pinsArea = document.querySelector(`.map__pins`);
   const pinsFragment = document.createDocumentFragment();
 
   for (let i = 0; i < adsArray.length; i++) {
