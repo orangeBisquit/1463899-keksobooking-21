@@ -72,7 +72,7 @@ const renderRandomAds = (adsNumber) => {
       offer: {
         title: title + adNumber,
         address: getRandomNumber(0, 600) + `, ` + getRandomNumber(0, 600),
-        price: getRandomNumber(100, 500),
+        price: getRandomNumber(1000, 10000),
         TYPE: TYPE[getRandomNumber(0, TYPE.length - 1)],
         rooms: getRandomNumber(2, 5),
         guests: getRandomNumber(2, 10),
@@ -168,8 +168,9 @@ const createCardFragment = (adsArray) => {
       newCard.querySelector(`.popup__text--address`).textContent =
         adsArray[i].offer.address;
 
-      newCard.querySelector(`.popup__text--price`).textContent =
-        adsArray[i].offer.price;
+      newCard.querySelector(
+        `.popup__text--price`
+      ).textContent = `${adsArray[i].offer.price}₽/ночь`;
 
       newCard.querySelector(`.popup__type`).textContent =
         TYPE_KEYS[adsArray[i].offer.TYPE];
