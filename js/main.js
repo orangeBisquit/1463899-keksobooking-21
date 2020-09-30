@@ -127,84 +127,83 @@ const renderPins = (adsArray) => {
   pinsArea.appendChild(pinsFragment);
 };
 
-const fixedRenderedPins = renderRandomAds(8);
+const fixedPins = renderRandomAds(8);
 
-renderPins(fixedRenderedPins);
+renderPins(fixedPins);
 
 // module3-task2, Задание 2
 
 const cardTemplate = document
   .querySelector(`#card`)
   .content.querySelector(`.map__card`);
-const mapFilters = map.querySelector(`.map__filters-container`);
 
 // Рендер включенных удобств
-const renderFeatures = (featuresArr, featuresBlock, element) => {
+const renderFeatures = (cardObject, featuresBlock, element) => {
+  const featuresArray = cardObject.offer.FEATURES;
   featuresBlock.innerHTML = ``;
-  const featuresFragment = document.createDocumentFragment();
 
-  for (let j = 0; j < featuresArr.length; j++) {
+  for (let j = 0; j < featuresArray.length; j++) {
     const featuresItem = document.createElement(element);
-    featuresItem.classList = `map__feature map__feature--${featuresArr[j]}`;
-    featuresFragment.appendChild(featuresItem);
+    featuresItem.classList = `map__feature map__feature--${featuresArray[j]}`;
+    featuresBlock.appendChild(featuresItem);
   }
-
-  featuresBlock.appendChild(featuresFragment);
 };
 
-// Рендер карточки
-const createCardFragment = (adsArray) => {
-  const cardFragment = document.createDocumentFragment();
+const renderPhotos = (cardObject, photosBlock) => {
+  const photoTemplate = photosBlock.querySelector("img");
+  photosBlock.innerHTML = ``;
+
+  cardObject.offer.photos.forEach((photoSrc) => {
+    const newPhoto = photoTemplate.cloneNode();
+    newPhoto.src = photoSrc;
+    photosBlock.appendChild(newPhoto);
+  });
+};
+
+// Соаздание карточки из объекта
+const createCard = (cardObject) => {
   const newCard = cardTemplate.cloneNode(true);
   const features = newCard.querySelector(`.popup__features`);
   const photos = newCard.querySelector(`.popup__photos`);
 
-  for (let i = 0; i < adsArray.length; i++) {
-    /* Отрисовка только одной карточки */
-    if (i === 0) {
-      newCard.querySelector(`.popup__title`).textContent =
-        adsArray[i].offer.title;
+  newCard.querySelector(`.popup__title`).textContent = cardObject.offer.title;
 
-      newCard.querySelector(`.popup__text--address`).textContent =
-        adsArray[i].offer.address;
+  newCard.querySelector(`.popup__text--address`).textContent =
+    cardObject.offer.address;
 
-      newCard.querySelector(
-        `.popup__text--price`
-      ).textContent = `${adsArray[i].offer.price}₽/ночь`;
+  newCard.querySelector(
+    `.popup__text--price`
+  ).textContent = `${cardObject.offer.price}₽/ночь`;
 
-      newCard.querySelector(`.popup__type`).textContent =
-        TYPE_KEYS[adsArray[i].offer.TYPE];
+  newCard.querySelector(`.popup__type`).textContent =
+    TYPE_KEYS[cardObject.offer.TYPE];
 
-      newCard.querySelector(
-        `.popup__text--capacity`
-      ).textContent = `${adsArray[i].offer.rooms} комнаты для ${adsArray[i].offer.guests} гостей`;
+  newCard.querySelector(
+    `.popup__text--capacity`
+  ).textContent = `${cardObject.offer.rooms} комнаты для ${cardObject.offer.guests} гостей`;
 
-      newCard.querySelector(
-        `.popup__text--time`
-      ).textContent = `Заезд после ${adsArray[i].offer.CHECKIN}, выезд до ${adsArray[i].offer.CHECKOUT}`; /* Как сюда вставить &nbsp; ? =) */
+  newCard.querySelector(
+    `.popup__text--time`
+  ).textContent = `Заезд после ${cardObject.offer.CHECKIN}, выезд до ${cardObject.offer.CHECKOUT}`;
 
-      renderFeatures(adsArray[i].offer.FEATURES, features, `li`);
-      newCard.querySelector(`.popup__description`).textContent =
-        adsArray[i].offer.description;
+  renderFeatures(cardObject, features, `li`);
 
-      const photoTemplate = photos.children[0];
-      photos.innerHTML = ``;
-      adsArray[i].offer.photos.forEach((photoSrc) => {
-        const newPhoto = photoTemplate.cloneNode();
-        newPhoto.src = photoSrc;
-        photos.appendChild(newPhoto);
-      });
+  newCard.querySelector(`.popup__description`).textContent =
+    cardObject.offer.description;
 
-      newCard.querySelector(`.popup__avatar`).src = adsArray[i].author.avatar;
-    }
+  renderPhotos(cardObject, photos);
 
-    cardFragment.appendChild(newCard);
-    return cardFragment;
-  }
+  newCard.querySelector(`.popup__avatar`).src = cardObject.author.avatar;
+
+  return newCard;
 };
 
-const renderCard = (createFragment) => {
-  map.insertBefore(createCardFragment(fixedRenderedPins), mapFilters);
+// Рендер карточки
+const mapFilters = map.querySelector(`.map__filters-container`);
+
+const renderCard = (createdCard) => {
+  const newCard = createdCard;
+  map.insertBefore(newCard, mapFilters);
 };
 
-renderCard(createCardFragment);
+renderCard(createCard(fixedPins[0]));
