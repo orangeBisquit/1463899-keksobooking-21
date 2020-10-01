@@ -94,8 +94,8 @@ const renderRandomAds = (adsNumber) => {
 /* ЗАДАНИЕ 2 */
 
 // Показать скрытую карту
-const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
+// const map = document.querySelector(`.map`);
+// map.classList.remove(`map--faded`);
 
 /* ЗАДАНИЕ 3 */
 
@@ -129,8 +129,6 @@ const renderPins = (adsArray) => {
 
 const fixedPins = renderRandomAds(8);
 
-renderPins(fixedPins);
-
 // module3-task2, Задание 2
 
 const cardTemplate = document
@@ -161,49 +159,191 @@ const renderPhotos = (cardObject, photosBlock) => {
 };
 
 // Соаздание карточки из объекта
-const createCard = (cardObject) => {
-  const newCard = cardTemplate.cloneNode(true);
-  const features = newCard.querySelector(`.popup__features`);
-  const photos = newCard.querySelector(`.popup__photos`);
+// const createCard = (cardObject) => {
+//   const newCard = cardTemplate.cloneNode(true);
+//   const features = newCard.querySelector(`.popup__features`);
+//   const photos = newCard.querySelector(`.popup__photos`);
 
-  newCard.querySelector(`.popup__title`).textContent = cardObject.offer.title;
+//   newCard.querySelector(`.popup__title`).textContent = cardObject.offer.title;
 
-  newCard.querySelector(`.popup__text--address`).textContent =
-    cardObject.offer.address;
+//   newCard.querySelector(`.popup__text--address`).textContent =
+//     cardObject.offer.address;
 
-  newCard.querySelector(
-    `.popup__text--price`
-  ).textContent = `${cardObject.offer.price}₽/ночь`;
+//   newCard.querySelector(
+//     `.popup__text--price`
+//   ).textContent = `${cardObject.offer.price}₽/ночь`;
 
-  newCard.querySelector(`.popup__type`).textContent =
-    TYPE_KEYS[cardObject.offer.TYPE];
+//   newCard.querySelector(`.popup__type`).textContent =
+//     TYPE_KEYS[cardObject.offer.TYPE];
 
-  newCard.querySelector(
-    `.popup__text--capacity`
-  ).textContent = `${cardObject.offer.rooms} комнаты для ${cardObject.offer.guests} гостей`;
+//   newCard.querySelector(
+//     `.popup__text--capacity`
+//   ).textContent = `${cardObject.offer.rooms} комнаты для ${cardObject.offer.guests} гостей`;
 
-  newCard.querySelector(
-    `.popup__text--time`
-  ).textContent = `Заезд после ${cardObject.offer.CHECKIN}, выезд до ${cardObject.offer.CHECKOUT}`;
+//   newCard.querySelector(
+//     `.popup__text--time`
+//   ).textContent = `Заезд после ${cardObject.offer.CHECKIN}, выезд до ${cardObject.offer.CHECKOUT}`;
 
-  renderFeatures(cardObject, features, `li`);
+//   renderFeatures(cardObject, features, `li`);
 
-  newCard.querySelector(`.popup__description`).textContent =
-    cardObject.offer.description;
+//   newCard.querySelector(`.popup__description`).textContent =
+//     cardObject.offer.description;
 
-  renderPhotos(cardObject, photos);
+//   renderPhotos(cardObject, photos);
 
-  newCard.querySelector(`.popup__avatar`).src = cardObject.author.avatar;
+//   newCard.querySelector(`.popup__avatar`).src = cardObject.author.avatar;
 
-  return newCard;
+//   return newCard;
+// };
+
+// // Рендер карточки
+// const mapFilters = map.querySelector(`.map__filters-container`);
+
+// const renderCard = (createdCard) => {
+//   const newCard = createdCard;
+//   map.insertBefore(newCard, mapFilters);
+// };
+
+// renderCard(createCard(fixedPins[0]));
+
+// module4-task1
+
+const mapPin = document.querySelector(".map__pin--main");
+const map = document.querySelector(`.map`);
+const adForm = document.querySelector(`.ad-form`);
+const adFormFields = adForm.querySelectorAll("fieldset");
+const mapFilters = document.querySelector(".map__filters");
+const mapFiltersField = mapFilters.querySelectorAll(".map__filter");
+const currentPins = pinsArea.children;
+const MAIN_PIN_WIDTH = 65;
+const MAIN_PIN_HEIGHT = 87; /* ROUND + after arrow */
+let pageIsActive = false;
+
+// Получаем позицию пина
+const getPinPosition = () => {
+  const pinPosition = {};
+  if (pageIsActive) {
+    pinPosition.xCoord = Math.round(mapPin.offsetLeft + MAIN_PIN_WIDTH);
+    pinPosition.yCoord = Math.round(mapPin.offsetTop + MAIN_PIN_HEIGHT / 2);
+    console.log(pinPosition);
+    return pinPosition;
+  }
+  pinPosition.xCoord = Math.round(mapPin.offsetLeft + MAIN_PIN_WIDTH / 2);
+  pinPosition.yCoord = Math.round(mapPin.offsetTop + MAIN_PIN_HEIGHT / 2);
+  console.log(pinPosition);
+  return pinPosition;
 };
 
-// Рендер карточки
-const mapFilters = map.querySelector(`.map__filters-container`);
+// Добавляем позицию пина в input
+const addressInput = document.querySelector("#address");
 
-const renderCard = (createdCard) => {
-  const newCard = createdCard;
-  map.insertBefore(newCard, mapFilters);
+const setCurrentAddress = () => {
+  let currentAddress = getPinPosition();
+  addressInput.value = currentAddress.xCoord + ", " + currentAddress.yCoord;
 };
 
-renderCard(createCard(fixedPins[0]));
+// Блокируем/разблокируем инпуты
+const toggleFields = (fields, boolean) => {
+  fields.forEach((item) => {
+    if (boolean) {
+      item.disabled = true;
+      return;
+    }
+    item.disabled = false;
+  });
+};
+
+const roomNumberInput = adForm.querySelector("#room_number");
+const capacityInput = adForm.querySelector("#capacity");
+const capacityOptions = capacityInput.querySelectorAll("option");
+
+roomNumberInput.addEventListener("change", () => {
+  roomsHandler();
+});
+
+const roomsHandler = () => {
+  if (roomNumberInput.options[roomNumberInput.selectedIndex].value === "1") {
+    toggleFields(capacityOptions, true);
+    capacityOptions[2].disabled = false;
+    capacityInput.value = "";
+    capacityInput.setCustomValidity(
+      "Количество гостей при выборе 1 комнаты может быть не больше 1"
+    );
+  } else if (
+    roomNumberInput.options[roomNumberInput.selectedIndex].value === "2"
+  ) {
+    toggleFields(capacityOptions, true);
+    capacityOptions[1].disabled = false;
+    capacityOptions[2].disabled = false;
+    capacityInput.value = "";
+    capacityInput.setCustomValidity(
+      "Количество гостей при выборе 2 комнат может быть не больше 2"
+    );
+  } else if (
+    roomNumberInput.options[roomNumberInput.selectedIndex].value === "3"
+  ) {
+    toggleFields(capacityOptions, true);
+    capacityOptions[0].disabled = false;
+    capacityOptions[1].disabled = false;
+    capacityOptions[2].disabled = false;
+    capacityInput.value = "";
+    capacityInput.setCustomValidity(
+      "Количество гостей при выборе 3 комнат может быть не больше 3"
+    );
+  } else if (
+    roomNumberInput.options[roomNumberInput.selectedIndex].value === "100"
+  ) {
+    toggleFields(capacityOptions, true);
+    capacityOptions[3].disabled = false;
+    capacityInput.value = "";
+    capacityInput.setCustomValidity(
+      "Выбор 100 комнат доступен только не для гостей"
+    );
+  }
+  capacityInput.reportValidity();
+};
+
+// Блокируем/разблокируем страницу
+const pageStateToggle = (state) => {
+  if (state === "disabled") {
+    map.classList.add("map--faded");
+    toggleFields(mapFiltersField, true);
+
+    adForm.classList.add("ad-form--disabled");
+    toggleFields(adFormFields, true);
+
+    mapFilters.classList.add("map__filters--faded");
+    pageIsActive = false;
+    setCurrentAddress();
+    roomsHandler();
+  } else if (state === "active") {
+    map.classList.remove("map--faded");
+    toggleFields(mapFiltersField, false);
+
+    adForm.disabled = true;
+
+    adForm.classList.remove("ad-form--disabled");
+    toggleFields(adFormFields, false);
+
+    mapFilters.classList.remove("map__filters--faded");
+
+    pageIsActive = true;
+    setCurrentAddress();
+  }
+};
+
+mapPin.addEventListener("mousedown", (evt) => {
+  if (evt.button === 0) {
+    pageStateToggle("active");
+    getPinPosition();
+  }
+});
+
+mapPin.addEventListener("keydown", (evt) => {
+  if (evt.keyCode === 13) {
+    pageStateToggle("active");
+    getPinPosition();
+  }
+});
+
+window.onload = pageStateToggle("disabled");
