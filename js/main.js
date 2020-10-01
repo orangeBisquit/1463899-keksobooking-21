@@ -13,7 +13,7 @@ const getOrderedArray = (min, max, value, postfix) => {
   const itemsCount = getRandomNumber(min, max);
 
   for (let j = 0; j < itemsCount; j++) {
-    newArray.push(value + j + postfix);
+    newArray.push(value + (j + 1) + postfix);
   }
   return newArray;
 };
@@ -24,9 +24,9 @@ const getRandomArrayItem = (array) => {
 };
 
 // Несколько рандомных значений массива
-const getRandomArrayValues = (array) => {
+const getRandomArrayValues = (min, array) => {
   const shuffledArray = array.sort(() => 0.5 - Math.random());
-  const valuesPickedNumber = getRandomNumber(0, array.length) + 1;
+  const valuesPickedNumber = getRandomNumber(min, array.length);
   const valuesPickedArray = [];
   for (let i = 0; i < valuesPickedNumber; i++) {
     valuesPickedArray[i] = shuffledArray[i];
@@ -38,8 +38,14 @@ const getRandomArrayValues = (array) => {
 
 // Переменные
 const avatarDir = `img/avatars/user0`; // + Number + .png
-const title = `Объявление`;
+const title = `Уютное гнездышко для молодоженов №`;
 const TYPE = [`palace`, `flat`, `house`, `bungalow`];
+const TYPE_KEYS = {
+  palace: `Дворец`,
+  flat: `Квартира`,
+  house: `Дом`,
+  bungalow: `Бунгало`,
+};
 const CHECKIN = [`12:00`, `13:00`, `14:00`];
 const CHECKOUT = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [
@@ -50,7 +56,7 @@ const FEATURES = [
   `elevator`,
   `conditioner`,
 ];
-const description = `Подробное описание №`;
+const description = `Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована. №`;
 const photosDir = `http://o0.github.io/assets/images/tokyo/hotel`; // + Number + .jpg
 
 const renderRandomAds = (adsNumber) => {
@@ -64,17 +70,17 @@ const renderRandomAds = (adsNumber) => {
         avatar: avatarDir + adNumber + `.png`,
       },
       offer: {
-        title: title + ` ` + adNumber,
-        address: getRandomNumber(0, 600) + ` ,` + getRandomNumber(0, 600),
-        price: getRandomNumber(100, 500),
+        title: title + adNumber,
+        address: getRandomNumber(0, 600) + `, ` + getRandomNumber(0, 600),
+        price: getRandomNumber(1000, 10000),
         TYPE: TYPE[getRandomNumber(0, TYPE.length - 1)],
-        rooms: getRandomNumber(1, 5),
-        guests: getRandomNumber(1, 10),
+        rooms: getRandomNumber(2, 5),
+        guests: getRandomNumber(2, 10),
         CHECKIN: getRandomArrayItem(CHECKIN),
         CHECKOUT: getRandomArrayItem(CHECKOUT),
-        FEATURES: getRandomArrayValues(FEATURES),
+        FEATURES: getRandomArrayValues(1, FEATURES),
         description: description + adNumber,
-        photos: getOrderedArray(2, 7, photosDir, `.jpg`),
+        photos: getOrderedArray(1, 3, photosDir, `.jpg`),
       },
       location: {
         x: getRandomNumber(0, document.querySelector(`.map`).offsetWidth),
@@ -121,4 +127,83 @@ const renderPins = (adsArray) => {
   pinsArea.appendChild(pinsFragment);
 };
 
-renderPins(renderRandomAds(8));
+const fixedPins = renderRandomAds(8);
+
+renderPins(fixedPins);
+
+// module3-task2, Задание 2
+
+const cardTemplate = document
+  .querySelector(`#card`)
+  .content.querySelector(`.map__card`);
+
+// Рендер включенных удобств
+const renderFeatures = (cardObject, featuresBlock, element) => {
+  const featuresArray = cardObject.offer.FEATURES;
+  featuresBlock.innerHTML = ``;
+
+  for (let j = 0; j < featuresArray.length; j++) {
+    const featuresItem = document.createElement(element);
+    featuresItem.classList = `map__feature map__feature--${featuresArray[j]}`;
+    featuresBlock.appendChild(featuresItem);
+  }
+};
+
+const renderPhotos = (cardObject, photosBlock) => {
+  const photoTemplate = photosBlock.querySelector("img");
+  photosBlock.innerHTML = ``;
+
+  cardObject.offer.photos.forEach((photoSrc) => {
+    const newPhoto = photoTemplate.cloneNode();
+    newPhoto.src = photoSrc;
+    photosBlock.appendChild(newPhoto);
+  });
+};
+
+// Соаздание карточки из объекта
+const createCard = (cardObject) => {
+  const newCard = cardTemplate.cloneNode(true);
+  const features = newCard.querySelector(`.popup__features`);
+  const photos = newCard.querySelector(`.popup__photos`);
+
+  newCard.querySelector(`.popup__title`).textContent = cardObject.offer.title;
+
+  newCard.querySelector(`.popup__text--address`).textContent =
+    cardObject.offer.address;
+
+  newCard.querySelector(
+    `.popup__text--price`
+  ).textContent = `${cardObject.offer.price}₽/ночь`;
+
+  newCard.querySelector(`.popup__type`).textContent =
+    TYPE_KEYS[cardObject.offer.TYPE];
+
+  newCard.querySelector(
+    `.popup__text--capacity`
+  ).textContent = `${cardObject.offer.rooms} комнаты для ${cardObject.offer.guests} гостей`;
+
+  newCard.querySelector(
+    `.popup__text--time`
+  ).textContent = `Заезд после ${cardObject.offer.CHECKIN}, выезд до ${cardObject.offer.CHECKOUT}`;
+
+  renderFeatures(cardObject, features, `li`);
+
+  newCard.querySelector(`.popup__description`).textContent =
+    cardObject.offer.description;
+
+  renderPhotos(cardObject, photos);
+
+  newCard.querySelector(`.popup__avatar`).src = cardObject.author.avatar;
+
+  return newCard;
+};
+
+// Рендер карточки
+const mapFilters = map.querySelector(`.map__filters-container`);
+
+const renderCard = (createdCard) => {
+  const newCard = createdCard;
+  map.insertBefore(newCard, mapFilters);
+};
+
+renderCard(createCard(fixedPins[0]));
