@@ -148,7 +148,7 @@ const renderFeatures = (cardObject, featuresBlock, element) => {
 };
 
 const renderPhotos = (cardObject, photosBlock) => {
-  const photoTemplate = photosBlock.querySelector("img");
+  const photoTemplate = photosBlock.querySelector(`img`);
   photosBlock.innerHTML = ``;
 
   cardObject.offer.photos.forEach((photoSrc) => {
@@ -208,12 +208,12 @@ const renderPhotos = (cardObject, photosBlock) => {
 
 // module4-task1
 
-const mapPin = document.querySelector(".map__pin--main");
+const mapPin = document.querySelector(`.map__pin--main`);
 const map = document.querySelector(`.map`);
 const adForm = document.querySelector(`.ad-form`);
-const adFormFields = adForm.querySelectorAll("fieldset");
-const mapFilters = document.querySelector(".map__filters");
-const mapFiltersField = mapFilters.querySelectorAll(".map__filter");
+const adFormFields = adForm.querySelectorAll(`fieldset`);
+const mapFilters = document.querySelector(`.map__filters`);
+const mapFiltersField = mapFilters.querySelectorAll(`.map__filter`);
 const currentPins = pinsArea.children;
 const MAIN_PIN_WIDTH = 65;
 const MAIN_PIN_HEIGHT = 87; /* ROUND + after arrow */
@@ -235,11 +235,11 @@ const getPinPosition = () => {
 };
 
 // Добавляем позицию пина в input
-const addressInput = document.querySelector("#address");
+const addressInput = document.querySelector(`#address`);
 
 const setCurrentAddress = () => {
   let currentAddress = getPinPosition();
-  addressInput.value = currentAddress.xCoord + ", " + currentAddress.yCoord;
+  addressInput.value = currentAddress.xCoord + `, ` + currentAddress.yCoord;
 };
 
 // Блокируем/разблокируем инпуты
@@ -253,97 +253,98 @@ const toggleFields = (fields, boolean) => {
   });
 };
 
-const roomNumberInput = adForm.querySelector("#room_number");
-const capacityInput = adForm.querySelector("#capacity");
-const capacityOptions = capacityInput.querySelectorAll("option");
+const roomNumberInput = adForm.querySelector(`#room_number`);
+const capacityInput = adForm.querySelector(`#capacity`);
+const capacityOptions = capacityInput.querySelectorAll(`option`);
 
-roomNumberInput.addEventListener("change", () => {
-  roomsHandler();
-});
-
+// Валидируем комнаты/гостей
 const roomsHandler = () => {
-  if (roomNumberInput.options[roomNumberInput.selectedIndex].value === "1") {
+  if (roomNumberInput.options[roomNumberInput.selectedIndex].value === `1`) {
     toggleFields(capacityOptions, true);
     capacityOptions[2].disabled = false;
-    capacityInput.value = "";
+    capacityInput.value = ``;
     capacityInput.setCustomValidity(
-      "Количество гостей при выборе 1 комнаты может быть не больше 1"
+      `Количество гостей при выборе 1 комнаты может быть не больше 1`
     );
   } else if (
-    roomNumberInput.options[roomNumberInput.selectedIndex].value === "2"
+    roomNumberInput.options[roomNumberInput.selectedIndex].value === `2`
   ) {
     toggleFields(capacityOptions, true);
     capacityOptions[1].disabled = false;
     capacityOptions[2].disabled = false;
-    capacityInput.value = "";
+    capacityInput.value = ``;
     capacityInput.setCustomValidity(
-      "Количество гостей при выборе 2 комнат может быть не больше 2"
+      `Количество гостей при выборе 2 комнат может быть не больше 2`
     );
   } else if (
-    roomNumberInput.options[roomNumberInput.selectedIndex].value === "3"
+    roomNumberInput.options[roomNumberInput.selectedIndex].value === `3`
   ) {
     toggleFields(capacityOptions, true);
     capacityOptions[0].disabled = false;
     capacityOptions[1].disabled = false;
     capacityOptions[2].disabled = false;
-    capacityInput.value = "";
+    capacityInput.value = ``;
     capacityInput.setCustomValidity(
-      "Количество гостей при выборе 3 комнат может быть не больше 3"
+      `Количество гостей при выборе 3 комнат может быть не больше 3`
     );
   } else if (
-    roomNumberInput.options[roomNumberInput.selectedIndex].value === "100"
+    roomNumberInput.options[roomNumberInput.selectedIndex].value === `100`
   ) {
     toggleFields(capacityOptions, true);
     capacityOptions[3].disabled = false;
-    capacityInput.value = "";
+    capacityInput.value = ``;
     capacityInput.setCustomValidity(
-      "Выбор 100 комнат доступен только не для гостей"
+      `Выбор 100 комнат доступен только не для гостей`
     );
   }
   capacityInput.reportValidity();
 };
 
+roomNumberInput.addEventListener(`change`, () => {
+  roomsHandler();
+});
+
 // Блокируем/разблокируем страницу
 const pageStateToggle = (state) => {
-  if (state === "disabled") {
-    map.classList.add("map--faded");
+  if (state === `disabled`) {
+    map.classList.add(`map--faded`);
     toggleFields(mapFiltersField, true);
 
-    adForm.classList.add("ad-form--disabled");
+    adForm.classList.add(`ad-form--disabled`);
     toggleFields(adFormFields, true);
 
-    mapFilters.classList.add("map__filters--faded");
+    mapFilters.classList.add(`map__filters--faded`);
     pageIsActive = false;
     setCurrentAddress();
     roomsHandler();
-  } else if (state === "active") {
-    map.classList.remove("map--faded");
+  } else if (state === `active`) {
+    map.classList.remove(`map--faded`);
     toggleFields(mapFiltersField, false);
 
     adForm.disabled = true;
 
-    adForm.classList.remove("ad-form--disabled");
+    adForm.classList.remove(`ad-form--disabled`);
     toggleFields(adFormFields, false);
 
-    mapFilters.classList.remove("map__filters--faded");
+    mapFilters.classList.remove(`map__filters--faded`);
 
     pageIsActive = true;
     setCurrentAddress();
   }
 };
 
-mapPin.addEventListener("mousedown", (evt) => {
+mapPin.addEventListener(`mousedown`, (evt) => {
   if (evt.button === 0) {
-    pageStateToggle("active");
+    pageStateToggle(`active`);
     getPinPosition();
   }
 });
 
-mapPin.addEventListener("keydown", (evt) => {
+mapPin.addEventListener(`keydown`, (evt) => {
   if (evt.keyCode === 13) {
-    pageStateToggle("active");
+    pageStateToggle(`active`);
     getPinPosition();
   }
 });
 
-window.onload = pageStateToggle("disabled");
+window.onload = pageStateToggle(`disabled`);
