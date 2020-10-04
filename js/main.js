@@ -219,27 +219,21 @@ const MAIN_PIN_WIDTH = 65;
 const MAIN_PIN_HEIGHT = 87; /* ROUND + after arrow */
 let pageIsActive = false;
 
-// Получаем позицию пина
-const getPinPosition = () => {
-  const pinPosition = {};
-  if (pageIsActive) {
-    pinPosition.xCoord = Math.round(mapPin.offsetLeft + MAIN_PIN_WIDTH);
-    pinPosition.yCoord = Math.round(mapPin.offsetTop + MAIN_PIN_HEIGHT / 2);
-    console.log(pinPosition);
-    return pinPosition;
-  }
-  pinPosition.xCoord = Math.round(mapPin.offsetLeft + MAIN_PIN_WIDTH / 2);
-  pinPosition.yCoord = Math.round(mapPin.offsetTop + MAIN_PIN_HEIGHT / 2);
-  console.log(pinPosition);
-  return pinPosition;
-};
-
 // Добавляем позицию пина в input
 const addressInput = document.querySelector(`#address`);
 
-const setCurrentAddress = () => {
-  let currentAddress = getPinPosition();
-  addressInput.value = currentAddress.xCoord + `, ` + currentAddress.yCoord;
+const setCoordinates = (pin) => {
+  if (pageIsActive) {
+    addressInput.value =
+      Math.round(pin.offsetLeft + MAIN_PIN_WIDTH) +
+      `, ` +
+      Math.round(pin.offsetTop + MAIN_PIN_HEIGHT / 2);
+    return;
+  }
+  addressInput.value =
+    Math.round(pin.offsetLeft + MAIN_PIN_WIDTH / 2) +
+    `, ` +
+    Math.round(pin.offsetTop + MAIN_PIN_HEIGHT / 2);
 };
 
 // Блокируем/разблокируем инпуты
@@ -253,98 +247,81 @@ const toggleFields = (fields, boolean) => {
   });
 };
 
+// Валидируем комнаты/гостей
+
 const roomNumberInput = adForm.querySelector(`#room_number`);
 const capacityInput = adForm.querySelector(`#capacity`);
 const capacityOptions = capacityInput.querySelectorAll(`option`);
-
-// Валидируем комнаты/гостей
-const roomsHandler = () => {
-  if (roomNumberInput.options[roomNumberInput.selectedIndex].value === `1`) {
-    toggleFields(capacityOptions, true);
-    capacityOptions[2].disabled = false;
-    capacityInput.value = ``;
-    capacityInput.setCustomValidity(
-      `Количество гостей при выборе 1 комнаты может быть не больше 1`
-    );
-  } else if (
-    roomNumberInput.options[roomNumberInput.selectedIndex].value === `2`
-  ) {
-    toggleFields(capacityOptions, true);
-    capacityOptions[1].disabled = false;
-    capacityOptions[2].disabled = false;
-    capacityInput.value = ``;
-    capacityInput.setCustomValidity(
-      `Количество гостей при выборе 2 комнат может быть не больше 2`
-    );
-  } else if (
-    roomNumberInput.options[roomNumberInput.selectedIndex].value === `3`
-  ) {
-    toggleFields(capacityOptions, true);
-    capacityOptions[0].disabled = false;
-    capacityOptions[1].disabled = false;
-    capacityOptions[2].disabled = false;
-    capacityInput.value = ``;
-    capacityInput.setCustomValidity(
-      `Количество гостей при выборе 3 комнат может быть не больше 3`
-    );
-  } else if (
-    roomNumberInput.options[roomNumberInput.selectedIndex].value === `100`
-  ) {
-    toggleFields(capacityOptions, true);
-    capacityOptions[3].disabled = false;
-    capacityInput.value = ``;
-    capacityInput.setCustomValidity(
-      `Выбор 100 комнат доступен только не для гостей`
-    );
-  }
-  capacityInput.reportValidity();
+const roomOptions = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
 };
 
-roomNumberInput.addEventListener(`change`, () => {
-  roomsHandler();
+const roomsChecker = (peopleAmount) => {
+  capacityOptions.forEach((option) => {
+    option.disabled = true;
+  });
+
+  roomOptions[peopleAmount].forEach((maximumPeople) => {
+    capacityOptions.forEach((option) => {
+      if (Number(option.value) === maximumPeople) {
+        option.disabled = false;
+        option.selected = true;
+      }
+    });
+  });
+};
+
+roomNumberInput.addEventListener(`change`, (evt) => {
+  roomsChecker(evt.target.value);
 });
 
 // Блокируем/разблокируем страницу
-const pageStateToggle = (state) => {
-  if (state === `disabled`) {
-    map.classList.add(`map--faded`);
-    toggleFields(mapFiltersField, true);
-
-    adForm.classList.add(`ad-form--disabled`);
-    toggleFields(adFormFields, true);
-
-    mapFilters.classList.add(`map__filters--faded`);
-    pageIsActive = false;
-    setCurrentAddress();
-    roomsHandler();
-  } else if (state === `active`) {
-    map.classList.remove(`map--faded`);
-    toggleFields(mapFiltersField, false);
-
-    adForm.disabled = true;
-
-    adForm.classList.remove(`ad-form--disabled`);
-    toggleFields(adFormFields, false);
-
-    mapFilters.classList.remove(`map__filters--faded`);
-
-    pageIsActive = true;
-    setCurrentAddress();
+const onPinMouseDown = (evt) => {
+  if (evt.button === 0) {
+    enablePage();
   }
 };
 
-mapPin.addEventListener(`mousedown`, (evt) => {
-  if (evt.button === 0) {
-    pageStateToggle(`active`);
-    getPinPosition();
-  }
-});
-
-mapPin.addEventListener(`keydown`, (evt) => {
+const onPinEnterPress = (evt) => {
   if (evt.keyCode === 13) {
-    pageStateToggle(`active`);
-    getPinPosition();
+    enablePage();
   }
-});
+};
 
-window.onload = pageStateToggle(`disabled`);
+const disablePage = () => {
+  map.classList.add(`map--faded`);
+  toggleFields(mapFiltersField, true);
+
+  adForm.classList.add(`ad-form--disabled`);
+  toggleFields(adFormFields, true);
+
+  mapFilters.classList.add(`map__filters--faded`);
+  pageIsActive = false;
+
+  setCoordinates(mapPin);
+
+  mapPin.addEventListener(`mousedown`, onPinMouseDown);
+  mapPin.addEventListener(`keydown`, onPinEnterPress);
+};
+
+const enablePage = () => {
+  map.classList.remove(`map--faded`);
+  toggleFields(mapFiltersField, false);
+
+  adForm.disabled = true;
+
+  adForm.classList.remove(`ad-form--disabled`);
+  toggleFields(adFormFields, false);
+
+  mapFilters.classList.remove(`map__filters--faded`);
+  pageIsActive = true;
+  setCoordinates(mapPin);
+
+  mapPin.removeEventListener(`mousedown`, onPinMouseDown);
+  mapPin.removeEventListener(`keydown`, onPinEnterPress);
+};
+
+window.onload = disablePage();
