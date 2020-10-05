@@ -49,7 +49,7 @@
     mapFilters.classList.add(`map__filters--faded`);
     pageIsActive = false;
 
-    setCoordinates(mapPin);
+    window.move.setCoords(mapPin);
 
     mapPin.addEventListener(`mousedown`, onPinMouseDown);
     mapPin.addEventListener(`keydown`, onPinEnterPress);
@@ -66,28 +66,11 @@
 
     mapFilters.classList.remove(`map__filters--faded`);
     pageIsActive = true;
-    setCoordinates(mapPin);
+    window.map.renderPins(window.data.fixedPins);
+    window.move.setCoords(mapPin);
 
     mapPin.removeEventListener(`mousedown`, onPinMouseDown);
     mapPin.removeEventListener(`keydown`, onPinEnterPress);
-  };
-
-  const addressInput = document.querySelector(`#address`);
-  const MAIN_PIN_WIDTH = 65;
-  const MAIN_PIN_HEIGHT = 87;
-
-  const setCoordinates = (pin) => {
-    if (window.pageState.pageIsActive) {
-      addressInput.value =
-        Math.round(pin.offsetLeft + MAIN_PIN_WIDTH) +
-        `, ` +
-        Math.round(pin.offsetTop + MAIN_PIN_HEIGHT / 2);
-      return;
-    }
-    addressInput.value =
-      Math.round(pin.offsetLeft + MAIN_PIN_WIDTH / 2) +
-      `, ` +
-      Math.round(pin.offsetTop + MAIN_PIN_HEIGHT / 2);
   };
 
   window.pageState = {

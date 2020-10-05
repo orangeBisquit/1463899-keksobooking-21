@@ -20,6 +20,10 @@
     const pinImg = newPin.querySelector(`img`);
     pinImg.alt = pinData.offer.description;
     pinImg.src = pinData.author.avatar;
+
+    newPin.addEventListener("click", () => {
+      window.map.renderCard(window.card.createCard(pinData));
+    })
     return newPin;
   };
 
