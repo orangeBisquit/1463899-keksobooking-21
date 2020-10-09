@@ -68,14 +68,8 @@
   const checkoutOptions = adForm.querySelectorAll("option");
 
   const timeChecker = (evt) => {
-    checkinOptions.forEach((inItem) => {
-      checkoutOptions.forEach((outItem) => {
-        if (evt.target.value === inItem.value && evt.target.value === outItem.value) {
-          inItem.selected = true;
-          outItem.selected = true;
-        }
-      });
-    });
+    checkinInput.value = evt.target.value;
+    checkoutInput.value = evt.target.value;
   };
 
   checkinInput.addEventListener("change", (evt) => {

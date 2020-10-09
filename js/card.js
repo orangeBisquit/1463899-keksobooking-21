@@ -5,17 +5,34 @@
     .querySelector(`#card`)
     .content.querySelector(`.map__card`);
 
+  // Закрытие карточки
+  const onCardEscapePress = (evt) => {
+    if (evt.keyCode === 27) {
+      const oldCard = document.querySelector(".map__card");
+      oldCard.remove();
+      document.removeEventListener("keydown", onCardEscapePress);
+    }
+  };
+
+  const onCloseButtonClick = (evt) => {
+    const oldCard = document.querySelector(".map__card");
+    oldCard.remove();
+    document.removeEventListener("click", onCloseButtonClick);
+  };
+
+  // Добавление features в карточку
   const renderFeatures = (cardObject, featuresBlock, element) => {
     const featuresArray = cardObject.offer.FEATURES;
     featuresBlock.innerHTML = ``;
 
-    for (let j = 0; j < featuresArray.length; j++) {
+    featuresArray.forEach((item) => {
       const featuresItem = document.createElement(element);
-      featuresItem.classList = `map__feature map__feature--${featuresArray[j]}`;
+      featuresItem.classList = `map__feature map__feature--${item}`;
       featuresBlock.appendChild(featuresItem);
-    }
+    });
   };
 
+  // Добавление фото в карточку
   const renderPhotos = (cardObject, photosBlock) => {
     const photoTemplate = photosBlock.querySelector(`img`);
     photosBlock.innerHTML = ``;
@@ -32,6 +49,7 @@
     const newCard = cardTemplate.cloneNode(true);
     const features = newCard.querySelector(`.popup__features`);
     const photos = newCard.querySelector(`.popup__photos`);
+    const cardCloseButton = newCard.querySelector(".popup__close");
 
     newCard.querySelector(`.popup__title`).textContent = cardObject.offer.title;
 
@@ -61,6 +79,9 @@
     renderPhotos(cardObject, photos);
 
     newCard.querySelector(`.popup__avatar`).src = cardObject.author.avatar;
+
+    document.addEventListener("keydown", onCardEscapePress);
+    cardCloseButton.addEventListener("click", onCloseButtonClick);
 
     return newCard;
   };

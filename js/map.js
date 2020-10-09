@@ -7,31 +7,13 @@
   const pinsArea = document.querySelector(`.map__pins`);
   const oldCard = document.querySelector(".map__card");
 
-  const onCardEscapePress = (evt) => {
-    if (evt.keyCode === 27) {
-      const oldCard = document.querySelector(".map__card");
-      oldCard.remove();
-      document.removeEventListener("keydown", onCardEscapePress);
-    }
-  };
-
-  const onCloseButtonClick = (evt) => {
-    const oldCard = document.querySelector(".map__card");
-    oldCard.remove();
-    document.removeEventListener("click", onCloseButtonClick);
-  };
-
   // Рендер карточки
-  const renderCard = (createdCard) => {
+  const renderCard = (cardData) => {
     const oldCard = document.querySelector(".map__card");
     if (oldCard) {
       oldCard.remove();
     }
-    const newCard = createdCard;
-    const cardCloseButton = newCard.querySelector(".popup__close");
-
-    document.addEventListener("keydown", onCardEscapePress);
-    cardCloseButton.addEventListener("click", onCloseButtonClick);
+    const newCard = cardData;
 
     map.insertBefore(newCard, mapFilters);
   };
@@ -39,9 +21,9 @@
   const renderPins = (adsArray) => {
     const pinsFragment = document.createDocumentFragment();
 
-    for (let i = 0; i < adsArray.length; i++) {
-      pinsFragment.appendChild(window.pin.generatePin(adsArray[i]));
-    }
+    adsArray.forEach((item) => {
+      pinsFragment.appendChild(window.pin.generatePin(item));
+    });
 
     pinsArea.appendChild(pinsFragment);
   };
