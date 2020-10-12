@@ -61,8 +61,6 @@
       mapPin.style.left = maxCoords.x + "px";
 
       setCoords(mapPin);
-
-      console.log(mapPin.offsetLeft + ", " + mapPin.offsetTop);
     }
 
     const onMouseUp = (upEvt) => {

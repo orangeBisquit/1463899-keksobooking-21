@@ -3,9 +3,7 @@
 (() => {
   const map = document.querySelector(`.map`);
   const mapFilters = document.querySelector(`.map__filters--container`);
-  const fixedPins = window.data.renderRandomAds(8);
   const pinsArea = document.querySelector(`.map__pins`);
-  const oldCard = document.querySelector(".map__card");
 
   // Рендер карточки
   const renderCard = (cardData) => {
@@ -30,8 +28,6 @@
 
   window.map = {
     renderCard,
-    renderPins
+    renderPins,
   };
-
 })();
-

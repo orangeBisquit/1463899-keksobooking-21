@@ -22,7 +22,7 @@
 
   // Добавление features в карточку
   const renderFeatures = (cardObject, featuresBlock, element) => {
-    const featuresArray = cardObject.offer.FEATURES;
+    const featuresArray = cardObject.offer.features;
     featuresBlock.innerHTML = ``;
 
     featuresArray.forEach((item) => {
@@ -69,7 +69,7 @@
 
     newCard.querySelector(
       `.popup__text--time`
-    ).textContent = `Заезд после ${cardObject.offer.CHECKIN}, выезд до ${cardObject.offer.CHECKOUT}`;
+    ).textContent = `Заезд после ${cardObject.offer.checkin}, выезд до ${cardObject.offer.checkout}`;
 
     renderFeatures(cardObject, features, `li`);
 
@@ -88,5 +88,5 @@
 
   window.card = {
     createCard,
-  }
+  };
 })();

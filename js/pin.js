@@ -29,6 +29,5 @@
 
   window.pin = {
     generatePin,
-  }
-
+  };
 })();
