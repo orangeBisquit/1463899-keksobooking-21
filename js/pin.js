@@ -23,12 +23,11 @@
 
     newPin.addEventListener("click", () => {
       window.map.renderCard(window.card.createCard(pinData));
-    })
+    });
     return newPin;
   };
 
   window.pin = {
     generatePin,
-  }
-
+  };
 })();

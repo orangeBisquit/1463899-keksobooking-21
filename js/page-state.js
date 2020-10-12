@@ -66,7 +66,11 @@
 
     mapFilters.classList.remove(`map__filters--faded`);
     pageIsActive = true;
-    window.map.renderPins(window.data.fixedPins);
+
+    window.load(window.map.renderPins, (error) => {
+      console.log(error);
+    });
+
     window.move.setCoords(mapPin);
 
     mapPin.removeEventListener(`mousedown`, onPinMouseDown);
@@ -76,6 +80,6 @@
   window.pageState = {
     pageIsActive,
     disablePage,
-    enablePage
-  }
+    enablePage,
+  };
 })();
