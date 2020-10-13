@@ -1,7 +1,7 @@
 "use strict";
 
 (() => {
-  const mapPin = document.querySelector('.map__pin--main')
+  const mapPin = document.querySelector(`.map__pin--main`);
   const addressInput = document.querySelector(`#address`);
   const MAIN_PIN_HEIGHT = 87;
   const MAIN_PIN_WIDTH = 65;
@@ -10,6 +10,7 @@
   const MAP_BOTTOM = 630;
   const MAP_LEFT = 0 - MAIN_PIN_WIDTH / 2;
 
+  // Проверка максимальных координат Пина
   const checkCoords = (x, y) => {
     let maxCoords = {};
 
@@ -32,12 +33,13 @@
     return maxCoords;
   };
 
-  mapPin.addEventListener("mousedown", (evt) => {
+  // Перетаскивание Пина
+  mapPin.addEventListener(`mousedown`, (evt) => {
     evt.preventDefault();
 
     let startCoords = {
       x: evt.clientX,
-      y: evt.clientY
+      y: evt.clientY,
     };
 
     const onMouseMove = (moveEvt) => {
@@ -45,35 +47,35 @@
 
       const shift = {
         x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
+        y: startCoords.y - moveEvt.clientY,
       };
 
       startCoords = {
         x: moveEvt.clientX,
-        y: moveEvt.clientY
+        y: moveEvt.clientY,
       };
 
-      mapPin.style.top = (mapPin.offsetTop - shift.y) + "px";
-      mapPin.style.left = (mapPin.offsetLeft - shift.x) + "px";
+      mapPin.style.top = mapPin.offsetTop - shift.y + `px`;
+      mapPin.style.left = mapPin.offsetLeft - shift.x + `px`;
 
       let maxCoords = checkCoords(mapPin.offsetLeft, mapPin.offsetTop);
-      mapPin.style.top = maxCoords.y + "px";
-      mapPin.style.left = maxCoords.x + "px";
+      mapPin.style.top = maxCoords.y + `px`;
+      mapPin.style.left = maxCoords.x + `px`;
 
       setCoords(mapPin);
-    }
+    };
 
     const onMouseUp = (upEvt) => {
       upEvt.preventDefault();
 
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener(`mousemove`, onMouseMove);
+      document.removeEventListener(`mouseup`, onMouseUp);
     };
 
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener(`mousemove`, onMouseMove);
+    document.addEventListener(`mouseup`, onMouseUp);
   });
-
+  // Установка координат Пина в поле адреса формы
   const setCoords = (pin) => {
     if (window.pageState.pageIsActive) {
       addressInput.value =
@@ -90,5 +92,5 @@
 
   window.move = {
     setCoords,
-  }
+  };
 })();

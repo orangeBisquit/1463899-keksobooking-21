@@ -2,7 +2,9 @@
 
 (() => {
   const adForm = document.querySelector(`.ad-form`); /* Повторяется */
-  const roomNumberInput = adForm.querySelector(`#room_number`); /* Повторяется */
+  const roomNumberInput = adForm.querySelector(
+    `#room_number`
+  ); /* Повторяется */
   const capacityInput = adForm.querySelector(`#capacity`);
   const capacityOptions = capacityInput.querySelectorAll(`option`);
 
@@ -13,10 +15,10 @@
     100: [0],
   };
   const HOUSING_OPTIONS = {
-    "bungalow": 0,
-    "flat": 1000,
-    "house": 5000,
-    "palace": 10000,
+    bungalow: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000,
   };
 
   // Валидация кол-ва гостей/комнат
@@ -39,49 +41,74 @@
   });
 
   // Заголовок объявления
-  const adHeadingInput = adForm.querySelector("#title");
-  adHeadingInput.addEventListener("input", (evt) => {
+  const adHeadingInput = adForm.querySelector(`#title`);
+  adHeadingInput.addEventListener(`input`, () => {
     adHeadingInput.reportValidity();
   });
 
   // Валидация Типа Жилья
-  const adTypeInput = adForm.querySelector("#type");
-  const adPriceInput = adForm.querySelector("#price");
+  const adTypeInput = adForm.querySelector(`#type`);
+  const adPriceInput = adForm.querySelector(`#price`);
 
   const typeChecker = (housingType) => {
-    adPriceInput.setAttribute("min", HOUSING_OPTIONS[housingType]);
-    adPriceInput.setAttribute("placeholder", HOUSING_OPTIONS[housingType]);
+    adPriceInput.setAttribute(`min`, HOUSING_OPTIONS[housingType]);
+    adPriceInput.setAttribute(`placeholder`, HOUSING_OPTIONS[housingType]);
   };
 
   adTypeInput.addEventListener(`change`, (evt) => {
     typeChecker(evt.target.value);
   });
 
-  adPriceInput.addEventListener(`input`, (evt) => {
+  adPriceInput.addEventListener(`input`, () => {
     adPriceInput.reportValidity();
   });
 
   // Валидация времени заезда/выезда
-  const checkinInput = adForm.querySelector("#timein");
-  const checkinOptions = adForm.querySelectorAll("option");
-  const checkoutInput = adForm.querySelector("#timeout");
-  const checkoutOptions = adForm.querySelectorAll("option");
+  const checkinInput = adForm.querySelector(`#timein`);
+  const checkoutInput = adForm.querySelector(`#timeout`);
 
   const timeChecker = (evt) => {
     checkinInput.value = evt.target.value;
     checkoutInput.value = evt.target.value;
   };
 
-  checkinInput.addEventListener("change", (evt) => {
+  checkinInput.addEventListener(`change`, (evt) => {
     timeChecker(evt);
   });
-  checkoutInput.addEventListener("change", (evt) => {
+  checkoutInput.addEventListener(`change`, (evt) => {
     timeChecker(evt);
   });
 
+  const formResetButton = adForm.querySelector(`.ad-form__reset`);
+
+  // Сброс формы
+  const resetForm = () => {
+    adForm.reset();
+  };
+  // Очистка формы
+  formResetButton.addEventListener(`click`, resetForm);
+
+  // Отправка формы
+  adForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    window.ajax.upload(
+      new FormData(adForm),
+      (data) => {
+        window.message.successMessageHandler();
+        window.pageState.disablePage();
+        console.log(data);
+      },
+      (error) => {
+        adForm.reportValidity();
+        window.message.errorMessageHandler();
+        console.log(error);
+      }
+    );
+  });
 
   window.form = {
     roomsChecker,
-    adForm
+    adForm,
+    resetForm,
   };
 })();
