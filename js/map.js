@@ -25,9 +25,20 @@
 
     pinsArea.appendChild(pinsFragment);
   };
+  // Удаление пинов после блокировки
+  const hidePins = () => {
+    const allPins = pinsArea.querySelectorAll(".map__pin:not(.map__pin--main)");
+    const mainPin = pinsArea.querySelector(".map__pin--main");
+    mainPin.style.left = "570px";
+    mainPin.style.top = "375px";
+    allPins.forEach((item) => {
+      item.remove();
+    });
+  };
 
   window.map = {
     renderCard,
     renderPins,
+    hidePins,
   };
 })();

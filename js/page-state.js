@@ -20,13 +20,12 @@
     });
   };
 
-  // Валидируем комнаты/гостей
-
+  // Валидидация комнаты/гостей
   roomNumberInput.addEventListener(`change`, (evt) => {
     window.form.roomsChecker(evt.target.value);
   });
 
-  // Блокируем/разблокируем страницу
+  // Блокировка/Разблокировка страницы
   const onPinMouseDown = (evt) => {
     if (evt.button === 0) {
       enablePage();
@@ -49,6 +48,8 @@
     mapFilters.classList.add(`map__filters--faded`);
     pageIsActive = false;
 
+    window.form.resetForm();
+    window.map.hidePins();
     window.move.setCoords(mapPin);
 
     mapPin.addEventListener(`mousedown`, onPinMouseDown);
@@ -67,7 +68,7 @@
     mapFilters.classList.remove(`map__filters--faded`);
     pageIsActive = true;
 
-    window.load(window.map.renderPins, (error) => {
+    window.ajax.download(window.map.renderPins, (error) => {
       console.log(error);
     });
 

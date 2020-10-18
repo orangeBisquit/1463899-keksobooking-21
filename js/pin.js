@@ -1,14 +1,7 @@
 "use strict";
 
 (() => {
-  const mapPin = document.querySelector(`.map__pin--main`);
-  const map = document.querySelector(`.map`);
   const pin = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-  const adFormFields = window.form.adForm.querySelectorAll(`fieldset`);
-  const mapFilters = document.querySelector(`.map__filters`);
-  const mapFiltersField = mapFilters.querySelectorAll(`.map__filter`);
-  const pinsArea = document.querySelector(`.map__pins`);
-  const currentPins = pinsArea.children;
 
   // Генерация пина
   const generatePin = (pinData) => {
