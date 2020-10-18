@@ -89,21 +89,20 @@
   formResetButton.addEventListener(`click`, resetForm);
 
   // Отправка формы
+  const onSuccesSubmit = (data) => {
+    window.message.successMessageHandler();
+    window.pageState.disablePage();
+    console.log(data);
+  };
+  const onErrorSubmit = (error) => {
+    adForm.reportValidity();
+    window.message.errorMessageHandler();
+    console.log(error);
+  };
+
   adForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
-    window.ajax.upload(
-      new FormData(adForm),
-      (data) => {
-        window.message.successMessageHandler();
-        window.pageState.disablePage();
-        console.log(data);
-      },
-      (error) => {
-        adForm.reportValidity();
-        window.message.errorMessageHandler();
-        console.log(error);
-      }
-    );
+    window.ajax.upload(new FormData(adForm), onSuccesSubmit, onErrorSubmit);
   });
 
   window.form = {
