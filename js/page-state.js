@@ -41,6 +41,7 @@
   const disablePage = () => {
     map.classList.add(`map--faded`);
     toggleFields(mapFiltersField, true);
+    mapFilters.removeEventListener(`change`, window.filter.filtersHandler);
 
     adForm.classList.add(`ad-form--disabled`);
     toggleFields(adFormFields, true);
@@ -50,6 +51,7 @@
 
     window.form.resetForm();
     window.map.hidePins();
+    window.map.resetMainPinCoords();
     window.move.setCoords(mapPin);
 
     mapPin.addEventListener(`mousedown`, onPinMouseDown);
@@ -59,6 +61,7 @@
   const enablePage = () => {
     map.classList.remove(`map--faded`);
     toggleFields(mapFiltersField, false);
+    mapFilters.addEventListener(`change`, window.filter.filtersHandler);
 
     adForm.disabled = true;
 

@@ -1,10 +1,10 @@
 "use strict";
 
 (() => {
-  const adForm = document.querySelector(`.ad-form`); /* Повторяется */
+  const adForm = document.querySelector(`.ad-form`);
   const roomNumberInput = adForm.querySelector(
     `#room_number`
-  ); /* Повторяется */
+  );
   const capacityInput = adForm.querySelector(`#capacity`);
   const capacityOptions = capacityInput.querySelectorAll(`option`);
 

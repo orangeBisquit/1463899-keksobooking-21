@@ -1,23 +1,33 @@
 "use strict";
 
 (() => {
+  const TYPE_KEYS = {
+    palace: `Дворец`,
+    flat: `Квартира`,
+    house: `Дом`,
+    bungalow: `Бунгало`,
+  };
+
   const cardTemplate = document
     .querySelector(`#card`)
     .content.querySelector(`.map__card`);
 
   // Закрытие карточки
+  const cardCloseHandler = () => {
+    const oldCard = document.querySelector(`.map__card`);
+    oldCard?.remove();
+  };
+
   const onCardEscapePress = (evt) => {
     if (evt.keyCode === 27) {
-      const oldCard = document.querySelector(".map__card");
-      oldCard.remove();
-      document.removeEventListener("keydown", onCardEscapePress);
+      cardCloseHandler();
+      document.removeEventListener(`keydown`, onCardEscapePress);
     }
   };
 
   const onCloseButtonClick = (evt) => {
-    const oldCard = document.querySelector(".map__card");
-    oldCard.remove();
-    document.removeEventListener("click", onCloseButtonClick);
+    cardCloseHandler();
+    document.removeEventListener(`click`, onCloseButtonClick);
   };
 
   // Добавление features в карточку
@@ -49,7 +59,7 @@
     const newCard = cardTemplate.cloneNode(true);
     const features = newCard.querySelector(`.popup__features`);
     const photos = newCard.querySelector(`.popup__photos`);
-    const cardCloseButton = newCard.querySelector(".popup__close");
+    const cardCloseButton = newCard.querySelector(`.popup__close`);
 
     newCard.querySelector(`.popup__title`).textContent = cardObject.offer.title;
 
@@ -61,7 +71,7 @@
     ).textContent = `${cardObject.offer.price}₽/ночь`;
 
     newCard.querySelector(`.popup__type`).textContent =
-      window.data.TYPE_KEYS[cardObject.offer.TYPE];
+      TYPE_KEYS[cardObject.offer.TYPE];
 
     newCard.querySelector(
       `.popup__text--capacity`
@@ -80,13 +90,14 @@
 
     newCard.querySelector(`.popup__avatar`).src = cardObject.author.avatar;
 
-    document.addEventListener("keydown", onCardEscapePress);
-    cardCloseButton.addEventListener("click", onCloseButtonClick);
+    document.addEventListener(`keydown`, onCardEscapePress);
+    cardCloseButton.addEventListener(`click`, onCloseButtonClick);
 
     return newCard;
   };
 
   window.card = {
     createCard,
+    cardCloseHandler
   };
 })();

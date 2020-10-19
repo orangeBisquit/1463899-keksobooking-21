@@ -7,7 +7,7 @@
 
   // Рендер карточки
   const renderCard = (cardData) => {
-    const oldCard = document.querySelector(".map__card");
+    const oldCard = document.querySelector(`.map__card`);
     if (oldCard) {
       oldCard.remove();
     }
@@ -16,7 +16,8 @@
     map.insertBefore(newCard, mapFilters);
   };
 
-  const renderPins = (adsArray) => {
+  const renderPins = (data) => {
+    const adsArray = window.filter.adsAmountFilter(data);
     const pinsFragment = document.createDocumentFragment();
 
     adsArray.forEach((item) => {
@@ -27,18 +28,29 @@
   };
   // Удаление пинов после блокировки
   const hidePins = () => {
-    const allPins = pinsArea.querySelectorAll(".map__pin:not(.map__pin--main)");
-    const mainPin = pinsArea.querySelector(".map__pin--main");
-    mainPin.style.left = "570px";
-    mainPin.style.top = "375px";
+    const allPins = pinsArea.querySelectorAll(`.map__pin:not(.map__pin--main)`);
     allPins.forEach((item) => {
       item.remove();
     });
+  };
+  // Возвращение главного пина на начальную точку
+  const resetMainPinCoords = () => {
+    const mainPin = pinsArea.querySelector(`.map__pin--main`);
+    mainPin.style.left = `570px`;
+    mainPin.style.top = `375px`;
+  }
+  // Обновление пинов
+  const updatePins = (data) => {
+    hidePins();
+    window.card.cardCloseHandler();
+    renderPins(data);
   };
 
   window.map = {
     renderCard,
     renderPins,
     hidePins,
+    updatePins,
+    resetMainPinCoords
   };
 })();
