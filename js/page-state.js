@@ -41,8 +41,6 @@
   const disablePage = () => {
     map.classList.add(`map--faded`);
     toggleFields(mapFiltersField, true);
-    mapFilters.removeEventListener(`change`, window.filter.filtersHandler);
-
     adForm.classList.add(`ad-form--disabled`);
     toggleFields(adFormFields, true);
 
@@ -53,15 +51,17 @@
     window.map.hidePins();
     window.map.resetMainPinCoords();
     window.move.setCoords(mapPin);
+    mapFilters.removeEventListener(`change`, window.filter.onFormChange);
 
     mapPin.addEventListener(`mousedown`, onPinMouseDown);
     mapPin.addEventListener(`keydown`, onPinEnterPress);
   };
 
   const enablePage = () => {
+    window.data.saveData();
+
     map.classList.remove(`map--faded`);
     toggleFields(mapFiltersField, false);
-    mapFilters.addEventListener(`change`, window.filter.filtersHandler);
 
     adForm.disabled = true;
 
@@ -71,14 +71,13 @@
     mapFilters.classList.remove(`map__filters--faded`);
     pageIsActive = true;
 
-    window.ajax.download(window.map.renderPins, (error) => {
-      console.log(error);
-    });
-
     window.move.setCoords(mapPin);
 
     mapPin.removeEventListener(`mousedown`, onPinMouseDown);
     mapPin.removeEventListener(`keydown`, onPinEnterPress);
+
+    window.map.renderPins(window.filter.applyAllFilters());
+    mapFilters.addEventListener(`change`, window.filter.onFilterFormChange);
   };
 
   window.pageState = {

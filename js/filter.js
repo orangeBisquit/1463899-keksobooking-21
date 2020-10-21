@@ -7,31 +7,34 @@
 
   const ANY_HOUSE_TYPE = "any";
 
-  const adsAmountFilter = (data) => {
-    return data.slice(0, MAXIMUM_ADS_SHOWN);
+  const FILTER_PRICE_KEYS = {
+    "low": 10000,
+    "high": 50000,
+  }
+
+  const getHousingType = (elem) => {
+    let currentHouseType = housingTypeFilter.value;
+    if (currentHouseType === ANY_HOUSE_TYPE) {
+      return true;
+    } else {
+      return currentHouseType === elem.offer.type;
+    };
   };
 
-  const typeFilter = (houseType) => {
-    window.ajax.download((data) => {
-      if (houseType !== ANY_HOUSE_TYPE) {
-        let filteredData = data.filter((elem) => {
-          return elem.offer.type === houseType;
-        });
-        window.map.updatePins(filteredData);
-        return;
-      } window.map.updatePins(data);
-    });
+  const applyAllFilters = () => {
+    const data = window.receivedData;
+    let myArr = data.filter((elem) => {
+      return getHousingType(elem);
+    }).slice(0, MAXIMUM_ADS_SHOWN);
+    return myArr;
   };
 
-  let currentHouseType;
-
-  const filtersHandler = (data) => {
-    currentHouseType = housingTypeFilter.value;
-    typeFilter(currentHouseType);
+  const onFilterFormChange = () => {
+    window.map.updatePins(window.filter.applyAllFilters());
   };
 
   window.filter = {
-    adsAmountFilter,
-    filtersHandler
+    applyAllFilters,
+    onFilterFormChange
   };
 })();

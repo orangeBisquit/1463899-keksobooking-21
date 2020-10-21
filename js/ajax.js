@@ -15,7 +15,7 @@
 
     xhr.addEventListener(`load`, () => {
       if (xhr.status === StatusCode.OK) {
-        onSuccess(xhr.response);
+        onSuccess(xhr.response, xhr);
       } else {
         onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
       }
@@ -48,8 +48,10 @@
     xhr.send(data);
   };
 
+
+
   window.ajax = {
     download,
-    upload,
+    upload
   };
 })();

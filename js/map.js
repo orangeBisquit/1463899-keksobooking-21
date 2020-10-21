@@ -16,8 +16,7 @@
     map.insertBefore(newCard, mapFilters);
   };
 
-  const renderPins = (data) => {
-    const adsArray = window.filter.adsAmountFilter(data);
+  const renderPins = (adsArray) => {
     const pinsFragment = document.createDocumentFragment();
 
     adsArray.forEach((item) => {
