@@ -58,7 +58,7 @@
   };
 
   const enablePage = () => {
-    window.data.saveData();
+    // window.data.saveData();
 
     map.classList.remove(`map--faded`);
     toggleFields(mapFiltersField, false);

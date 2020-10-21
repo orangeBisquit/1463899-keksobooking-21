@@ -2,7 +2,6 @@
 
 (() => {
   const saveOnSuccess = (data) => {
-    const myData = data;
     window.receivedData = data;
     return window.receivedData;
   };
@@ -15,7 +14,7 @@
     window.ajax.download(saveOnSuccess, onErrorFN);
   };
 
-  // saveData();
+  saveData();
 
   window.data = {
     saveData,
