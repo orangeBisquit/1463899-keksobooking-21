@@ -48,7 +48,7 @@
     pageIsActive = false;
 
     window.form.resetForm();
-    window.map.hidePins();
+    window.pin.hidePins();
     window.map.resetMainPinCoords();
     window.move.setCoords(mapPin);
     mapFilters.removeEventListener(`change`, window.filter.onFormChange);
@@ -58,7 +58,10 @@
   };
 
   const enablePage = () => {
-    // window.data.saveData();
+    window.ajax.download((data) => {
+      window.receivedData = data;
+      window.map.renderPins(data);
+    });
 
     map.classList.remove(`map--faded`);
     toggleFields(mapFiltersField, false);
@@ -76,7 +79,6 @@
     mapPin.removeEventListener(`mousedown`, onPinMouseDown);
     mapPin.removeEventListener(`keydown`, onPinEnterPress);
 
-    window.map.renderPins(window.filter.applyAllFilters());
     mapFilters.addEventListener(`change`, window.filter.onFilterFormChange);
   };
 

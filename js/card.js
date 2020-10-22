@@ -1,6 +1,9 @@
 "use strict";
 
 (() => {
+  const map = document.querySelector(`.map`);
+  const mapFilters = document.querySelector(`.map__filters--container`);
+
   const TYPE_KEYS = {
     palace: `Дворец`,
     flat: `Квартира`,
@@ -96,8 +99,20 @@
     return newCard;
   };
 
+  // Рендер карточки
+  const renderCard = (cardData) => {
+    const oldCard = document.querySelector(`.map__card`);
+    if (oldCard) {
+      oldCard.remove();
+    }
+    const newCard = cardData;
+
+    map.insertBefore(newCard, mapFilters);
+  };
+
   window.card = {
     createCard,
-    cardCloseHandler
+    cardCloseHandler,
+    renderCard
   };
 })();

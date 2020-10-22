@@ -2,9 +2,10 @@
 
 (() => {
   const pin = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+  const pinsArea = document.querySelector(`.map__pins`);
 
   // Генерация пина
-  const generatePin = (pinData) => {
+  const getPin = (pinData) => {
     const newPin = pin.cloneNode(true);
     const locationX = pinData.location.x - pin.offsetWidth;
     const locationY = pinData.location.y - pin.offsetWidth;
@@ -15,12 +16,20 @@
     pinImg.src = pinData.author.avatar;
 
     newPin.addEventListener(`click`, () => {
-      window.map.renderCard(window.card.createCard(pinData));
+      window.card.renderCard(window.card.createCard(pinData));
     });
     return newPin;
   };
+  // Удаление пинов после блокировки
+  const hidePins = () => {
+    const allPins = pinsArea.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    allPins.forEach((item) => {
+      item.remove();
+    });
+  };
 
   window.pin = {
-    generatePin,
+    getPin,
+    hidePins
   };
 })();

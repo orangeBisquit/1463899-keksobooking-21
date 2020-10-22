@@ -15,7 +15,7 @@
 
     xhr.addEventListener(`load`, () => {
       if (xhr.status === StatusCode.OK) {
-        onSuccess(xhr.response, xhr);
+        onSuccess(xhr.response);
       } else {
         onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
       }
