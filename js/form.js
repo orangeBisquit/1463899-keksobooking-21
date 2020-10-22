@@ -2,11 +2,15 @@
 
 (() => {
   const adForm = document.querySelector(`.ad-form`);
-  const roomNumberInput = adForm.querySelector(
-    `#room_number`
-  );
+  const adFormFields = adForm.querySelectorAll(`fieldset`);
+  const roomNumberInput = adForm.querySelector(`#room_number`);
   const capacityInput = adForm.querySelector(`#capacity`);
   const capacityOptions = capacityInput.querySelectorAll(`option`);
+  const adTypeInput = adForm.querySelector(`#type`);
+  const adPriceInput = adForm.querySelector(`#price`);
+  const checkinInput = adForm.querySelector(`#timein`);
+  const checkoutInput = adForm.querySelector(`#timeout`);
+  const formResetButton = adForm.querySelector(`.ad-form__reset`);
 
   const ROOM_OPTIONS = {
     1: [1],
@@ -40,16 +44,13 @@
     roomsChecker(evt.target.value);
   });
 
-  // Заголовок объявления
+  // Валидация заголовка объявления
   const adHeadingInput = adForm.querySelector(`#title`);
   adHeadingInput.addEventListener(`input`, () => {
     adHeadingInput.reportValidity();
   });
 
   // Валидация Типа Жилья
-  const adTypeInput = adForm.querySelector(`#type`);
-  const adPriceInput = adForm.querySelector(`#price`);
-
   const typeChecker = (housingType) => {
     adPriceInput.setAttribute(`min`, HOUSING_OPTIONS[housingType]);
     adPriceInput.setAttribute(`placeholder`, HOUSING_OPTIONS[housingType]);
@@ -64,9 +65,6 @@
   });
 
   // Валидация времени заезда/выезда
-  const checkinInput = adForm.querySelector(`#timein`);
-  const checkoutInput = adForm.querySelector(`#timeout`);
-
   const timeChecker = (evt) => {
     checkinInput.value = evt.target.value;
     checkoutInput.value = evt.target.value;
@@ -78,36 +76,44 @@
   checkoutInput.addEventListener(`change`, (evt) => {
     timeChecker(evt);
   });
-
-  const formResetButton = adForm.querySelector(`.ad-form__reset`);
-
   // Сброс формы
   const resetForm = () => {
     adForm.reset();
   };
-  // Очистка формы
+  // Обработчик очистки формы
   formResetButton.addEventListener(`click`, resetForm);
 
   // Отправка формы
-  const onSuccesSubmit = (data) => {
+  const onSuccesSubmit = () => {
     window.message.successMessageHandler();
-    window.pageState.disablePage();
-    console.log(data);
+    window.page.disablePage();
   };
-  const onErrorSubmit = (error) => {
+  const onErrorSubmit = () => {
     adForm.reportValidity();
     window.message.errorMessageHandler();
-    console.log(error);
   };
 
   adForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
     window.ajax.upload(new FormData(adForm), onSuccesSubmit, onErrorSubmit);
   });
+  // Активация формы
+  const enableForm = () => {
+    adForm.disabled = true;
+    window.page.toggleFields(adFormFields, false);
+    adForm.classList.remove(`ad-form--disabled`);
+  };
+  // Блокировка формы
+  const disableForm = () => {
+    adForm.classList.add(`ad-form--disabled`);
+    window.page.toggleFields(adFormFields, true);
+  };
 
   window.form = {
     roomsChecker,
     adForm,
     resetForm,
+    enableForm,
+    disableForm
   };
 })();

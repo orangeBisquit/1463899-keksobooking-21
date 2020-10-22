@@ -32,7 +32,6 @@
 
     return xhr;
   };
-
   // Загрузка объявлений
   const download = (onSuccess, onError) => {
     const xhr = new XMLHttpRequest();
@@ -47,9 +46,6 @@
     xhr.open(`POST`, UPLOAD_URL);
     xhr.send(data);
   };
-
-
-
   window.ajax = {
     download,
     upload

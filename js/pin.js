@@ -20,6 +20,21 @@
     });
     return newPin;
   };
+  const renderPins = (adsArray) => {
+    const pinsFragment = document.createDocumentFragment();
+
+    adsArray.slice(0, 5).forEach((item) => {
+      pinsFragment.appendChild(getPin(item));
+    });
+
+    pinsArea.appendChild(pinsFragment);
+  };
+  // Обновление пинов
+  const updatePins = window.debounce((data) => {
+    hidePins();
+    window.card.cardCloseHandler();
+    renderPins(data);
+  });
   // Удаление пинов после блокировки
   const hidePins = () => {
     const allPins = pinsArea.querySelectorAll(`.map__pin:not(.map__pin--main)`);
@@ -30,6 +45,8 @@
 
   window.pin = {
     getPin,
-    hidePins
+    hidePins,
+    renderPins,
+    updatePins
   };
 })();

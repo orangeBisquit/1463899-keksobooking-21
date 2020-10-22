@@ -77,7 +77,7 @@
   });
   // Установка координат Пина в поле адреса формы
   const setCoords = (pin) => {
-    if (window.pageState.pageIsActive) {
+    if (window.page.pageIsActive) {
       addressInput.value =
         Math.round(pin.offsetLeft + MAIN_PIN_WIDTH) +
         `, ` +

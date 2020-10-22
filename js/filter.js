@@ -2,6 +2,7 @@
 
 (() => {
   const mapFilters = document.querySelector(`.map__filters`);
+  const mapFiltersField = mapFilters.querySelectorAll(`.map__filter`);
   const housingTypeFilter = mapFilters.querySelector(`#housing-type`);
   const housingPriceFilter = mapFilters.querySelector(`#housing-price`);
   const housingRoomsFilter = mapFilters.querySelector(`#housing-rooms`);
@@ -84,11 +85,24 @@
   };
 
   const onFilterFormChange = () => {
-    window.map.updatePins(window.filter.applyAllFilters());
+    window.pin.updatePins(window.filter.applyAllFilters());
   };
+  // Активация фильтров
+  const enableFilters = () => {
+    window.page.toggleFields(mapFiltersField, false);
+    mapFilters.classList.remove(`map__filters--faded`);
+  };
+  // Блокировка фильтров
+  const disableFilters = () => {
+    window.page.toggleFields(mapFiltersField, true);
+    mapFilters.classList.add(`map__filters--faded`);
+  };
+
 
   window.filter = {
     applyAllFilters,
-    onFilterFormChange
+    onFilterFormChange,
+    enableFilters,
+    disableFilters
   };
 })();
