@@ -18,7 +18,9 @@
   // Закрытие карточки
   const cardCloseHandler = () => {
     const oldCard = document.querySelector(`.map__card`);
-    oldCard?.remove();
+    if (oldCard) {
+      oldCard.remove();
+    }
   };
 
   const onCardEscapePress = (evt) => {
@@ -28,7 +30,7 @@
     }
   };
 
-  const onCloseButtonClick = (evt) => {
+  const onCloseButtonClick = () => {
     cardCloseHandler();
     document.removeEventListener(`click`, onCloseButtonClick);
   };
