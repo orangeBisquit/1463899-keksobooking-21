@@ -72,18 +72,18 @@
       cardObject.offer.address;
 
     newCard.querySelector(
-      `.popup__text--price`
+        `.popup__text--price`
     ).textContent = `${cardObject.offer.price}₽/ночь`;
 
     newCard.querySelector(`.popup__type`).textContent =
       TYPE_KEYS[cardObject.offer.TYPE];
 
     newCard.querySelector(
-      `.popup__text--capacity`
+        `.popup__text--capacity`
     ).textContent = `${cardObject.offer.rooms} комнаты для ${cardObject.offer.guests} гостей`;
 
     newCard.querySelector(
-      `.popup__text--time`
+        `.popup__text--time`
     ).textContent = `Заезд после ${cardObject.offer.checkin}, выезд до ${cardObject.offer.checkout}`;
 
     renderFeatures(cardObject, features, `li`);

@@ -53,6 +53,7 @@
     disableMap();
 
     window.form.resetForm();
+    window.preview.previewImageDeleter();
     window.pin.hidePins();
     resetMainPinCoords();
     window.move.setCoords(mapPin);

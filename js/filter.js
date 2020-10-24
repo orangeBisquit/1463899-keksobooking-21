@@ -26,56 +26,29 @@
   };
   // Фильтр по Типу
   const getHousingType = (elem) => {
-    let currentHouseType = housingTypeFilter.value;
-
-    if (currentHouseType === FILTER_TYPE_ANY) {
-      return true;
-    } else {
-      return currentHouseType === elem.offer.type;
-    }
+    return housingTypeFilter.value === FILTER_TYPE_ANY ? true : housingTypeFilter.value === elem.offer.type;
   };
   // Фильтр по Цене
   const getHousingPrice = (elem) => {
-    let currentHousePrice = housingPriceFilter.value;
-
-    if (currentHousePrice === `low`) {
-      return elem.offer.price < PRICE_KEYS.low;
-    } else if (currentHousePrice === `middle`) {
-      return elem.offer.price >= PRICE_KEYS.low && elem.offer.price <= PRICE_KEYS.high;
-    } else if (currentHousePrice === `high`) {
-      return elem.offer.price > PRICE_KEYS.high;
-    } else {
-      return true;
+    switch (housingPriceFilter.value) {
+      case `low`:
+        return elem.offer.price < PRICE_KEYS.low;
+      case `middle`:
+        return elem.offer.price >= PRICE_KEYS.low && elem.offer.price <= PRICE_KEYS.high;
+      case `high`:
+        return elem.offer.price > PRICE_KEYS.high;
+      default:
+        return true;
     }
   };
 
   // Фильтр по Числу Комнат
   const getRoomsNumber = (elem) => {
-    let currentRoomsNumber = housingRoomsFilter.value;
-
-    if (currentRoomsNumber === `1`) {
-      return elem.offer.rooms === 1;
-    } else if (currentRoomsNumber === `2`) {
-      return elem.offer.rooms === 2;
-    } else if (currentRoomsNumber === `3`) {
-      return elem.offer.rooms === 3;
-    } else {
-      return true;
-    }
+    return housingRoomsFilter.value === FILTER_TYPE_ANY ? true : parseInt(housingRoomsFilter.value, 10) === elem.offer.rooms;
   };
   // Фильтр по Числу Гостей
   const getGuestsNumber = (elem) => {
-    let currentGuestsNumber = housingGuestsFilter.value;
-
-    if (currentGuestsNumber === `0`) {
-      return elem.offer.rooms === 0;
-    } else if (currentGuestsNumber === `1`) {
-      return elem.offer.rooms === 1;
-    } else if (currentGuestsNumber === `2`) {
-      return elem.offer.rooms === 2;
-    } else {
-      return true;
-    }
+    return housingGuestsFilter.value === FILTER_TYPE_ANY ? true : parseInt(housingGuestsFilter.value, 10) === elem.offer.guests;
   };
   // Применение всех фильтров
   const applyAllFilters = () => {
