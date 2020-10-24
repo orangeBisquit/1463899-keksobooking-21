@@ -2,9 +2,10 @@
 
 (() => {
   const pin = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+  const pinsArea = document.querySelector(`.map__pins`);
 
   // Генерация пина
-  const generatePin = (pinData) => {
+  const getPin = (pinData) => {
     const newPin = pin.cloneNode(true);
     const locationX = pinData.location.x - pin.offsetWidth;
     const locationY = pinData.location.y - pin.offsetWidth;
@@ -14,13 +15,38 @@
     pinImg.alt = pinData.offer.description;
     pinImg.src = pinData.author.avatar;
 
-    newPin.addEventListener("click", () => {
-      window.map.renderCard(window.card.createCard(pinData));
+    newPin.addEventListener(`click`, () => {
+      window.card.renderCard(window.card.createCard(pinData));
     });
     return newPin;
   };
+  const renderPins = (adsArray) => {
+    const pinsFragment = document.createDocumentFragment();
+
+    adsArray.slice(0, 5).forEach((item) => {
+      pinsFragment.appendChild(getPin(item));
+    });
+
+    pinsArea.appendChild(pinsFragment);
+  };
+  // Обновление пинов
+  const updatePins = window.debounce((data) => {
+    hidePins();
+    window.card.cardCloseHandler();
+    renderPins(data);
+  });
+  // Удаление пинов после блокировки
+  const hidePins = () => {
+    const allPins = pinsArea.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    allPins.forEach((item) => {
+      item.remove();
+    });
+  };
 
   window.pin = {
-    generatePin,
+    getPin,
+    hidePins,
+    renderPins,
+    updatePins
   };
 })();
