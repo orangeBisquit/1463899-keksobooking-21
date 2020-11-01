@@ -1,5 +1,4 @@
 "use strict";
-(() => {
-  window.onload = window.page.disablePage();
-})();
+
+window.onload = window.page.disablePage();
 
