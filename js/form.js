@@ -1,15 +1,5 @@
 "use strict";
 
-const adForm = document.querySelector(`.ad-form`);
-const adFormFields = adForm.querySelectorAll(`fieldset`);
-const roomNumberInput = adForm.querySelector(`#room_number`);
-const capacityInput = adForm.querySelector(`#capacity`);
-const capacityOptions = capacityInput.querySelectorAll(`option`);
-const adTypeInput = adForm.querySelector(`#type`);
-const adPriceInput = adForm.querySelector(`#price`);
-const checkinInput = adForm.querySelector(`#timein`);
-const checkoutInput = adForm.querySelector(`#timeout`);
-
 const ROOM_OPTIONS = {
   1: [1],
   2: [1, 2],
@@ -22,6 +12,16 @@ const HOUSING_OPTIONS = {
   house: 5000,
   palace: 10000,
 };
+
+const adForm = document.querySelector(`.ad-form`);
+const adFormFields = adForm.querySelectorAll(`fieldset`);
+const roomNumberInput = adForm.querySelector(`#room_number`);
+const capacityInput = adForm.querySelector(`#capacity`);
+const capacityOptions = capacityInput.querySelectorAll(`option`);
+const adTypeInput = adForm.querySelector(`#type`);
+const adPriceInput = adForm.querySelector(`#price`);
+const checkinInput = adForm.querySelector(`#timein`);
+const checkoutInput = adForm.querySelector(`#timeout`);
 
 // Валидация кол-ва гостей/комнат
 const roomsChecker = (peopleAmount) => {
@@ -77,16 +77,16 @@ checkoutInput.addEventListener(`change`, (evt) => {
 // Сброс формы
 const resetForm = () => {
   adForm.reset();
-  window.preview.previewImageDeleter();
+  window.preview.imageDeleter();
 };
 // Отправка формы
 const onSuccesSubmit = () => {
-  window.message.successMessageHandler();
-  window.page.disablePage();
+  window.message.successHandler();
+  window.page.disable();
 };
 const onErrorSubmit = () => {
   adForm.reportValidity();
-  window.message.errorMessageHandler();
+  window.message.errorHandler();
 };
 
 adForm.addEventListener(`submit`, (evt) => {
@@ -107,8 +107,7 @@ const disableForm = () => {
 
 window.form = {
   roomsChecker,
-  adForm,
-  resetForm,
-  enableForm,
-  disableForm
+  reset: resetForm,
+  enable: enableForm,
+  disable: disableForm
 };

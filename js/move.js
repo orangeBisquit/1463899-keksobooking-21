@@ -1,13 +1,14 @@
 "use strict";
 
-const mapPin = document.querySelector(`.map__pin--main`);
-const addressInput = document.querySelector(`#address`);
 const MAIN_PIN_HEIGHT = 87;
 const MAIN_PIN_WIDTH = 65;
 const MAP_TOP = 130 - MAIN_PIN_HEIGHT / 2;
 const MAP_RIGHT = 1200 - MAIN_PIN_WIDTH / 2;
 const MAP_BOTTOM = 630 - MAIN_PIN_HEIGHT / 2;
 const MAP_LEFT = 0 - MAIN_PIN_WIDTH / 2;
+
+const mapPin = document.querySelector(`.map__pin--main`);
+const addressInput = document.querySelector(`#address`);
 
 // Проверка максимальных координат Пина
 const checkCoords = (x, y) => {
@@ -76,7 +77,7 @@ mapPin.addEventListener(`mousedown`, (evt) => {
 });
 // Установка координат Пина в поле адреса формы
 const setCoords = (pin) => {
-  if (window.page.pageIsActive) {
+  if (window.page.isActive) {
     addressInput.value =
       Math.round(pin.offsetLeft + MAIN_PIN_WIDTH) +
       `, ` +

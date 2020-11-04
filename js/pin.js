@@ -23,7 +23,7 @@ const getPin = (pinData) => {
   pinImg.src = pinData.author.avatar;
 
   newPin.addEventListener(`click`, () => {
-    window.card.renderCard(window.card.createCard(pinData));
+    window.card.renderCard(window.card.create(pinData));
     getActivePin(newPin);
   });
   return newPin;
@@ -40,7 +40,7 @@ const renderPins = (adsArray) => {
 // Обновление пинов
 const updatePins = window.debounce((data) => {
   hidePins();
-  window.card.cardCloseHandler();
+  window.card.closeHandler();
   renderPins(data);
 });
 // Удаление пинов после блокировки
@@ -52,8 +52,7 @@ const hidePins = () => {
 };
 
 window.pin = {
-  getPin,
-  hidePins,
-  renderPins,
-  updatePins
+  hide: hidePins,
+  render: renderPins,
+  update: updatePins
 };

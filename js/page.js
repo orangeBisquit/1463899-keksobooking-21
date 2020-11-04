@@ -1,5 +1,8 @@
 "use strict";
 
+const PIN_START_X = `570px`;
+const PIN_START_Y = `375px`;
+
 const pinsArea = document.querySelector(`.map__pins`);
 const map = document.querySelector(`.map`);
 const mapFilters = document.querySelector(`.map__filters`);
@@ -20,8 +23,8 @@ const toggleFields = (fields, boolean) => {
 // Возвращение главного пина на начальную точку
 const resetMainPinCoords = () => {
   const mainPin = pinsArea.querySelector(`.map__pin--main`);
-  mainPin.style.left = `570px`;
-  mainPin.style.top = `375px`;
+  mainPin.style.left = PIN_START_X;
+  mainPin.style.top = PIN_START_Y;
 };
 
 // Обработчики активации страницы
@@ -48,13 +51,13 @@ const disableMap = () => {
 };
 // Блокировка страницы
 const disablePage = () => {
-  window.filter.disableFilters();
-  window.form.disableForm();
+  window.filter.disableAll();
+  window.form.disable();
   disableMap();
 
-  window.form.resetForm();
-  window.preview.previewImageDeleter();
-  window.pin.hidePins();
+  window.form.reset();
+  window.preview.imageDeleter();
+  window.pin.hide();
   resetMainPinCoords();
   window.move.setCoords(mapPin);
 
@@ -66,26 +69,26 @@ const disablePage = () => {
 const enablePage = () => {
   window.ajax.download((data) => {
     window.receivedData = data;
-    window.pin.renderPins(data);
+    window.pin.render(data);
   });
 
-  window.filter.enableFilters();
-  window.form.enableForm();
+  window.filter.enableAll();
+  window.form.enable();
   enableMap();
 
   window.move.setCoords(mapPin);
 
   mapPin.removeEventListener(`mousedown`, onPinMouseDown);
   mapPin.removeEventListener(`keydown`, onPinEnterPress);
-  mapFilters.addEventListener(`change`, window.filter.onFilterFormChange);
+  mapFilters.addEventListener(`change`, window.filter.onFormChange);
 };
 // Обработчик очистки формы
 formResetButton.addEventListener(`click`, disablePage);
 
 
 window.page = {
-  pageIsActive,
-  disablePage,
-  enablePage,
+  isActive: pageIsActive,
+  disable: disablePage,
+  enable: enablePage,
   toggleFields
 };

@@ -48,6 +48,6 @@ const errorMessageHandler = () => {
 };
 
 window.message = {
-  successMessageHandler,
-  errorMessageHandler,
+  successHandler: successMessageHandler,
+  errorHandler: errorMessageHandler,
 };

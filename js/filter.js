@@ -1,4 +1,10 @@
 "use strict";
+const FILTER_TYPE_ANY = `any`;
+
+const PRICE_KEYS = {
+  "low": 10000,
+  "high": 50000,
+};
 
 const mapFilters = document.querySelector(`.map__filters`);
 const mapFiltersField = mapFilters.querySelectorAll(`.map__filter`);
@@ -7,13 +13,6 @@ const housingPriceFilter = mapFilters.querySelector(`#housing-price`);
 const housingRoomsFilter = mapFilters.querySelector(`#housing-rooms`);
 const housingGuestsFilter = mapFilters.querySelector(`#housing-guests`);
 const MAXIMUM_ADS_SHOWN = 5;
-
-const FILTER_TYPE_ANY = `any`;
-
-const PRICE_KEYS = {
-  "low": 10000,
-  "high": 50000,
-};
 
 // Фильтр по включенным услугам
 const getFeatures = (elem) => {
@@ -57,7 +56,7 @@ const applyAllFilters = () => {
 };
 
 const onFilterFormChange = () => {
-  window.pin.updatePins(window.filter.applyAllFilters());
+  window.pin.update(applyAllFilters());
 };
 // Активация фильтров
 const enableFilters = () => {
@@ -72,9 +71,8 @@ const disableFilters = () => {
 
 
 window.filter = {
-  applyAllFilters,
-  onFilterFormChange,
-  enableFilters,
-  disableFilters
+  onFormChange: onFilterFormChange,
+  enableAll: enableFilters,
+  disableAll: disableFilters
 };
 

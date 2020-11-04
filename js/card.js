@@ -1,15 +1,14 @@
 "use strict";
 
-
-const map = document.querySelector(`.map`);
-const mapFilters = document.querySelector(`.map__filters--container`);
-
 const TYPE_KEYS = {
   palace: `Дворец`,
   flat: `Квартира`,
   house: `Дом`,
   bungalow: `Бунгало`,
 };
+
+const map = document.querySelector(`.map`);
+const mapFilters = document.querySelector(`.map__filters--container`);
 
 const cardTemplate = document
   .querySelector(`#card`)
@@ -113,8 +112,8 @@ const renderCard = (cardData) => {
 };
 
 window.card = {
-  createCard,
-  cardCloseHandler,
-  renderCard
+  create: createCard,
+  closeHandler: cardCloseHandler,
+  render: renderCard
 };
 

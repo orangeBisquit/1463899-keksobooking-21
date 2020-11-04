@@ -2,11 +2,6 @@
 
 const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 
-const avatarPreview = document.querySelector(`.ad-form-header__preview`);
-const avatarPhotoInput = document.querySelector(`.ad-form__field input[type="file"]`);
-const housePreview = document.querySelector(`.ad-form__photo`);
-const housePhotoInput = document.querySelector(`.ad-form__upload input[type="file"]`);
-
 const PREVIEW_STYLE = {
   image: {
     width: `70px`,
@@ -19,6 +14,11 @@ const PREVIEW_STYLE = {
     position: `relative`,
   }
 };
+
+const avatarPreview = document.querySelector(`.ad-form-header__preview`);
+const avatarPhotoInput = document.querySelector(`.ad-form__field input[type="file"]`);
+const housePreview = document.querySelector(`.ad-form__photo`);
+const housePhotoInput = document.querySelector(`.ad-form__upload input[type="file"]`);
 
 const getPreviewImage = (parent, reader) => {
   const previewImage = document.createElement(`img`);
@@ -74,5 +74,5 @@ housePhotoInput.addEventListener(`change`, previewHandler(housePhotoInput, house
 
 
 window.preview = {
-  previewImageDeleter
+  imageDeleter: previewImageDeleter
 };
