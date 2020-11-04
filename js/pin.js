@@ -23,7 +23,7 @@ const getPin = (pinData) => {
   pinImg.src = pinData.author.avatar;
 
   newPin.addEventListener(`click`, () => {
-    window.card.renderCard(window.card.create(pinData));
+    window.card.render(window.card.create(pinData));
     getActivePin(newPin);
   });
   return newPin;
